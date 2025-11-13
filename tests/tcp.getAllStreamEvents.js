@@ -30,7 +30,7 @@ describe('TCP Client - Get All Stream Events', () => {
     assert.equal(evs[999].data.id, 999);
 
     await client.close();
-  }).timeout(5000);
+  }, { timeout: 5000 });
 
   it('Should write events and read back all events from start event', async () => {
     const client = new KurrentDB.TCPClient(getTcpConfig());
@@ -53,5 +53,5 @@ describe('TCP Client - Get All Stream Events', () => {
     assert.equal(evs[499].data.id, 999);
 
     await client.close();
-  }).timeout(5000);
+  }, { timeout: 5000 });
 });

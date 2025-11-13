@@ -16,7 +16,7 @@ describe('Http Client - Check Stream Exist', () => {
     });
 
     assert.equal(await client.checkStreamExists(testStream), true);
-  }).timeout(5000);
+  }, { timeout: 5000 });
 
   it('Should return false when a stream does not exist', async () => {
     const client = new KurrentDB.HTTPClient(getHttpConfig());
@@ -38,7 +38,7 @@ describe('Http Client - Check Stream Exist', () => {
         assert(err.message.includes('ECONNREFUSED'), 'Connection refused error expected');
         callback();
       });
-  }).timeout(5000);
+  }, { timeout: 5000 });
 
   it('Should throw an exception when timeout is reached', (callback) => {
     const httpConfig = getHttpConfig();
