@@ -27,9 +27,9 @@ services:
       singleclusternetwork:
         ipv4_address: 172.30.239.10
 
-  metronomic-kurrentdb_promise_test_single.eventstore:
+  metronomic-kurrentdb_promise_test_single.kurrent:
     image: kurrentplatform/kurrentdb:25.0
-    container_name: metronomic-kurrentdb_promise_test_single.eventstore
+    container_name: metronomic-kurrentdb_promise_test_single.kurrent
     environment:
       - KURRENTDB_MEM_DB=true
       - KURRENTDB_CLUSTER_SIZE=1

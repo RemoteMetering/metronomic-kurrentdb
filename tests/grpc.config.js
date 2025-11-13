@@ -1,13 +1,14 @@
 import './_globalHooks.js';
+import { describe, it } from 'node:test';
 
 import assert from 'assert';
 import getGRPCConfig from './support/getGRPCConfig.js';
-import EventStore from '../lib/index.js';
+import KurrentDB from '../lib/index.js';
 
 describe('gRPC Client - Config', () => {
   it('Should return assertion error when config is undefined', (done) => {
     try {
-      new EventStore.GRPCClient();
+      new KurrentDB.GRPCClient();
       done('Config should not pass assertion');
     } catch (err) {
       assert.equal(err === undefined, false);
@@ -25,7 +26,7 @@ describe('gRPC Client - Config', () => {
           password: 'changeit'
         }
       };
-      new EventStore.GRPCClient(config);
+      new KurrentDB.GRPCClient(config);
       done();
     } catch (err) {
       assert.equal(err === undefined, false);
@@ -40,7 +41,7 @@ describe('gRPC Client - Config', () => {
         hostname: 'localhost',
         port: 1113
       };
-      new EventStore.GRPCClient(config);
+      new KurrentDB.GRPCClient(config);
       done();
     } catch (err) {
       assert.equal(err === undefined, false);
@@ -51,7 +52,7 @@ describe('gRPC Client - Config', () => {
 
   it('Should return tcp client when config is complete', (done) => {
     try {
-      const client = new EventStore.GRPCClient(getGRPCConfig());
+      const client = new KurrentDB.GRPCClient(getGRPCConfig());
       assert.equal(client !== undefined, true);
       done();
     } catch (err) {

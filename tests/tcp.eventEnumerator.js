@@ -1,16 +1,17 @@
 import './_globalHooks.js';
+import { describe, it } from 'node:test';
 
 import assert from 'assert';
 import generateEventId from '../lib/utilities/generateEventId.js';
 import getTcpConfig from './support/getTcpConfig.js';
-import EventStore from '../lib/index.js';
+import KurrentDB from '../lib/index.js';
 
-const eventFactory = new EventStore.EventFactory();
+const eventFactory = new KurrentDB.EventFactory();
 
 describe('TCP Client - Event Enumerator', () => {
   describe('Forward: Reading events', () => {
     it('Read next events', async () => {
-      const client = new EventStore.TCPClient(getTcpConfig());
+      const client = new KurrentDB.TCPClient(getTcpConfig());
 
       const events = [];
       for (let k = 0; k < 100; k++) {
@@ -39,7 +40,7 @@ describe('TCP Client - Event Enumerator', () => {
     });
 
     it('Read first 10 events, next 20 events, previous 30 events', async () => {
-      const client = new EventStore.TCPClient(getTcpConfig());
+      const client = new KurrentDB.TCPClient(getTcpConfig());
 
       const events = [];
       for (let k = 0; k < 100; k++) {
@@ -73,7 +74,7 @@ describe('TCP Client - Event Enumerator', () => {
     });
 
     it('Read last 10 events, previous 30 events, next 30 events', async () => {
-      const client = new EventStore.TCPClient(getTcpConfig());
+      const client = new KurrentDB.TCPClient(getTcpConfig());
 
       const events = [];
       for (let k = 0; k < 100; k++) {
@@ -107,7 +108,7 @@ describe('TCP Client - Event Enumerator', () => {
     });
 
     it('Read first and last batch', async () => {
-      const client = new EventStore.TCPClient(getTcpConfig());
+      const client = new KurrentDB.TCPClient(getTcpConfig());
 
       const events = [];
       for (let k = 0; k < 100; k++) {
@@ -136,7 +137,7 @@ describe('TCP Client - Event Enumerator', () => {
     });
 
     it('Handle out of bounds Enumeration Request ', async () => {
-      const client = new EventStore.TCPClient(getTcpConfig());
+      const client = new KurrentDB.TCPClient(getTcpConfig());
 
       const events = [];
       for (let k = 0; k < 100; k++) {
@@ -177,7 +178,7 @@ describe('TCP Client - Event Enumerator', () => {
 
   describe('Backward: Reading events', () => {
     it('Read next events', async () => {
-      const client = new EventStore.TCPClient(getTcpConfig());
+      const client = new KurrentDB.TCPClient(getTcpConfig());
 
       const events = [];
       for (let k = 0; k < 100; k++) {
@@ -206,7 +207,7 @@ describe('TCP Client - Event Enumerator', () => {
     });
 
     it('Read first 10 events, next 20 events, previous 30 events', async () => {
-      const client = new EventStore.TCPClient(getTcpConfig());
+      const client = new KurrentDB.TCPClient(getTcpConfig());
 
       const events = [];
       for (let k = 0; k < 100; k++) {
@@ -240,7 +241,7 @@ describe('TCP Client - Event Enumerator', () => {
     });
 
     it('Read last 10 events, previous 20 events, next 30 events', async () => {
-      const client = new EventStore.TCPClient(getTcpConfig());
+      const client = new KurrentDB.TCPClient(getTcpConfig());
 
       const events = [];
       for (let k = 0; k < 100; k++) {
@@ -274,7 +275,7 @@ describe('TCP Client - Event Enumerator', () => {
     });
 
     it('Read first and last batch', async () => {
-      const client = new EventStore.TCPClient(getTcpConfig());
+      const client = new KurrentDB.TCPClient(getTcpConfig());
 
       const events = [];
       for (let k = 0; k < 100; k++) {
@@ -303,7 +304,7 @@ describe('TCP Client - Event Enumerator', () => {
     });
 
     it('Handle out of bounds Enumeration Request ', async () => {
-      const client = new EventStore.TCPClient(getTcpConfig());
+      const client = new KurrentDB.TCPClient(getTcpConfig());
 
       const events = [];
       for (let k = 0; k < 100; k++) {

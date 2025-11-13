@@ -1,13 +1,14 @@
 import './_globalHooks.js';
+import { describe, it } from 'node:test';
 
 import assert from 'assert';
 import generateEventId from '../lib/utilities/generateEventId.js';
 import getTcpConfig from './support/getTcpConfig.js';
-import EventStore from '../lib/index.js';
+import KurrentDB from '../lib/index.js';
 
 describe('TCP Client - Write Event', () => {
   it('Write to a new stream and read the event', async () => {
-    const client = new EventStore.TCPClient(getTcpConfig());
+    const client = new KurrentDB.TCPClient(getTcpConfig());
 
     const testStream = `TestStream-${generateEventId()}`;
     await client.writeEvent(testStream, 'TestEventType', {
@@ -21,7 +22,7 @@ describe('TCP Client - Write Event', () => {
   });
 
   it('Should fail promise if no event data provided', () => {
-    const client = new EventStore.TCPClient(getTcpConfig());
+    const client = new KurrentDB.TCPClient(getTcpConfig());
 
     const testStream = `TestStream-${generateEventId()}`;
     return client
@@ -40,7 +41,7 @@ describe('TCP Client - Write Event to pre-populated stream', () => {
   let client;
   let testStream;
   beforeEach(async () => {
-    client = new EventStore.TCPClient(getTcpConfig());
+    client = new KurrentDB.TCPClient(getTcpConfig());
     testStream = `TestStream-${generateEventId()}`;
 
     await client.writeEvent(testStream, 'TestEventType', {

@@ -1,19 +1,20 @@
 import './_globalHooks.js';
+import { describe, it } from 'node:test';
 
 import assert from 'assert';
 import generateEventId from '../lib/utilities/generateEventId.js';
 import getGRPCConfig from './support/getGRPCConfig.js';
 import sleep from './utilities/sleep.js';
-import EventStore from '../lib/index.js';
+import KurrentDB from '../lib/index.js';
 
-const eventFactory = new EventStore.EventFactory();
+const eventFactory = new KurrentDB.EventFactory();
 
 describe('gRPC Client - Get Events', () => {
   const globalTestStream = `TestStream-${generateEventId()}`;
   const globalNumberOfEvents = 10;
 
   before(async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const events = [];
 
@@ -31,7 +32,7 @@ describe('gRPC Client - Get Events', () => {
   });
 
   it('Should read events reading forward', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readEventsForward(globalTestStream);
     assert.equal(result.events.length, 10);
@@ -45,7 +46,7 @@ describe('gRPC Client - Get Events', () => {
   });
 
   it('Should read events reading backward', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readEventsBackward(globalTestStream);
     assert.equal(result.events.length, 10);
@@ -55,7 +56,7 @@ describe('gRPC Client - Get Events', () => {
   });
 
   it('Should read last event reading backward with larger size than events', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readEventsBackward(globalTestStream, 0, 250);
     assert.equal(result.events.length, 1);
@@ -65,7 +66,7 @@ describe('gRPC Client - Get Events', () => {
   });
 
   it('Should not get any events when start event is greater than the stream length', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readEventsForward(globalTestStream, 11);
     assert.equal(result.events.length, 0);
@@ -74,7 +75,7 @@ describe('gRPC Client - Get Events', () => {
   });
 
   it('Should read events reading backward from a start position', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readEventsBackward(globalTestStream, 2);
     assert.equal(result.events.length, 3);
@@ -84,7 +85,7 @@ describe('gRPC Client - Get Events', () => {
   });
 
   it('Should read events reading backward with a count greater than the stream length', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readEventsBackward(globalTestStream, undefined, 10000);
     assert.equal(result.events.length, 10);
@@ -93,33 +94,36 @@ describe('gRPC Client - Get Events', () => {
     await client.close();
   });
 
-  it('Should read events reading forward with a count greater than the stream length return a maximum of 4096', async function () {
-    this.timeout(40000);
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+  it(
+    'Should read events reading forward with a count greater than the stream length return a maximum of 4096',
+    async () => {
+      const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
-    const testStream = `TestStream-${generateEventId()}`;
-    const numberOfEvents = 5000;
-    const events = [];
+      const testStream = `TestStream-${generateEventId()}`;
+      const numberOfEvents = 5000;
+      const events = [];
 
-    for (let i = 1; i <= numberOfEvents; i++) {
-      events.push(
-        eventFactory.newEvent('TestEventType', {
-          something: i
-        })
-      );
-    }
+      for (let i = 1; i <= numberOfEvents; i++) {
+        events.push(
+          eventFactory.newEvent('TestEventType', {
+            something: i
+          })
+        );
+      }
 
-    await client.writeEvents(testStream, events);
-    const result = await client.readEventsForward(testStream, undefined, 5000);
-    assert.equal(result.events.length, 4096);
-    assert.equal(result.events[0].data.something, 1);
-    assert.equal(result.events[4095].data.something, 4096);
+      await client.writeEvents(testStream, events);
+      const result = await client.readEventsForward(testStream, undefined, 5000);
+      assert.equal(result.events.length, 4096);
+      assert.equal(result.events[0].data.something, 1);
+      assert.equal(result.events[4095].data.something, 4096);
 
-    await client.close();
-  });
+      await client.close();
+    },
+    { timeout: 40 * 1000 }
+  );
 
   it('Should read linked to events and map correctly', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readEventsForward('$ce-TestStream', 0, 1);
     assert.equal(result.events.length, 1);
@@ -131,7 +135,7 @@ describe('gRPC Client - Get Events', () => {
   });
 
   it('Should read system and deleted events without resolveLinkTos', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const deletedStream = 'TestStreamDeleted';
     await client.writeEvent(deletedStream, 'TestEventType', { something: 1 });

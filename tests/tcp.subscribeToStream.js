@@ -1,96 +1,103 @@
 import './_globalHooks.js';
+import { describe, it } from 'node:test';
 
 import assert from 'assert';
 import generateEventId from '../lib/utilities/generateEventId.js';
 import getTcpConfig from './support/getTcpConfig.js';
 import sleep from './utilities/sleep.js';
-import EventStore from '../lib/index.js';
+import KurrentDB from '../lib/index.js';
 
-const eventFactory = new EventStore.EventFactory();
+const eventFactory = new KurrentDB.EventFactory();
 
 describe('TCP Client - Subscribe To Stream', () => {
-  it('Should get all events written to a subscription stream after subscription is started', function (done) {
-    this.timeout(15 * 1000);
-    const client = new EventStore.TCPClient(getTcpConfig());
-    const testStream = `TestStream-${generateEventId()}`;
-    let processedEventCount = 0;
-    let hasPassed = false;
+  it(
+    'Should get all events written to a subscription stream after subscription is started',
+    (done) => {
+      const client = new KurrentDB.TCPClient(getTcpConfig());
+      const testStream = `TestStream-${generateEventId()}`;
+      let processedEventCount = 0;
+      let hasPassed = false;
 
-    function onEventAppeared() {
-      processedEventCount += 1;
-    }
-
-    async function onDropped() {
-      if (!hasPassed) {
-        await client.closeAllPools();
-        done('should not drop');
+      function onEventAppeared() {
+        processedEventCount += 1;
       }
-    }
 
-    const initialEvents = [];
+      async function onDropped() {
+        if (!hasPassed) {
+          await client.closeAllPools();
+          done('should not drop');
+        }
+      }
 
-    for (let k = 0; k < 10; k++) {
-      initialEvents.push(
-        eventFactory.newEvent('TestEventType', {
-          id: k
-        })
-      );
-    }
+      const initialEvents = [];
 
-    client
-      .writeEvents(testStream, initialEvents)
-      .then(() => {
-        client.subscribeToStream(testStream, onEventAppeared, onDropped, false).then((subscription) =>
-          sleep(3000).then(async () => {
-            assert.equal(10, processedEventCount, 'expect processed events to be 10');
-            assert(subscription, 'Subscription Expected');
-            hasPassed = true;
-            await subscription.close();
-            await client.close();
-            done();
+      for (let k = 0; k < 10; k++) {
+        initialEvents.push(
+          eventFactory.newEvent('TestEventType', {
+            id: k
           })
         );
-        const events = [];
-        for (let k = 0; k < 10; k++) {
-          events.push(
-            eventFactory.newEvent('TestEventType', {
-              id: k
+      }
+
+      client
+        .writeEvents(testStream, initialEvents)
+        .then(() => {
+          client.subscribeToStream(testStream, onEventAppeared, onDropped, false).then((subscription) =>
+            sleep(3000).then(async () => {
+              assert.equal(10, processedEventCount, 'expect processed events to be 10');
+              assert(subscription, 'Subscription Expected');
+              hasPassed = true;
+              await subscription.close();
+              await client.close();
+              done();
             })
           );
-        }
-        return sleep(100).then(() => client.writeEvents(testStream, events));
-      })
-      .catch(done);
-  });
+          const events = [];
+          for (let k = 0; k < 10; k++) {
+            events.push(
+              eventFactory.newEvent('TestEventType', {
+                id: k
+              })
+            );
+          }
+          return sleep(100).then(() => client.writeEvents(testStream, events));
+        })
+        .catch(done);
+    },
+    { timeout: 15 * 1000 }
+  );
 
-  it('Should be able to start multiple subscriptions from single client instance', async function () {
-    this.timeout(15 * 1000);
-    const client = new EventStore.TCPClient(getTcpConfig());
+  it(
+    'Should be able to start multiple subscriptions from single client instance',
+    async () => {
+      const client = new KurrentDB.TCPClient(getTcpConfig());
 
-    const testStream = `TestStream-${generateEventId()}`;
-    const events = [];
-    for (let k = 0; k < 10; k++) events.push(eventFactory.newEvent('TestEventType', { id: k }));
+      const testStream = `TestStream-${generateEventId()}`;
+      const events = [];
+      for (let k = 0; k < 10; k++) events.push(eventFactory.newEvent('TestEventType', { id: k }));
 
-    let processedEventCount1 = 0;
-    let processedEventCount2 = 0;
-    const onEv1 = () => {
-      processedEventCount1 += 1;
-    };
-    const onEv2 = () => {
-      processedEventCount2 += 1;
-    };
+      let processedEventCount1 = 0;
+      let processedEventCount2 = 0;
+      const onEv1 = () => {
+        processedEventCount1 += 1;
+      };
+      const onEv2 = () => {
+        processedEventCount2 += 1;
+      };
 
-    const sub1 = await client.subscribeToStream(testStream, onEv1, () => {});
-    const sub2 = await client.subscribeToStream(testStream, onEv2, () => {});
-    await sleep(1000);
-    await client.writeEvents(testStream, events);
-    await sleep(3000);
+      const sub1 = await client.subscribeToStream(testStream, onEv1, () => {});
+      const sub2 = await client.subscribeToStream(testStream, onEv2, () => {});
+      await sleep(1000);
+      await client.writeEvents(testStream, events);
+      await sleep(3000);
 
-    assert.equal(10, processedEventCount1, 'Expect processed events to be 10 for subscription 1');
-    assert.equal(10, processedEventCount2, 'Expect processed events to be 10 for subscription 2');
+      assert.equal(10, processedEventCount1, 'Expect processed events to be 10 for subscription 1');
+      assert.equal(10, processedEventCount2, 'Expect processed events to be 10 for subscription 2');
 
-    await sub1.close();
-    await sub2.close();
-    await client.closeAllPools();
-  });
+      await sub1.close();
+      await sub2.close();
+      await client.closeAllPools();
+    },
+    { timeout: 15 * 1000 }
+  );
 });

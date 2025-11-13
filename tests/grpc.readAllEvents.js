@@ -1,18 +1,19 @@
 import './_globalHooks.js';
+import { describe, it } from 'node:test';
 
 import assert from 'assert';
 import generateEventId from '../lib/utilities/generateEventId.js';
 import getGRPCConfig from './support/getGRPCConfig.js';
-import EventStore from '../lib/index.js';
+import KurrentDB from '../lib/index.js';
 
-const eventFactory = new EventStore.EventFactory();
+const eventFactory = new KurrentDB.EventFactory();
 
 describe('gRPC Client - $All Stream Events', () => {
   const globalTestStream = `TestStream-${generateEventId()}`;
   const globalNumberOfEvents = 10;
 
   before(async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const events = [];
 
@@ -30,7 +31,7 @@ describe('gRPC Client - $All Stream Events', () => {
   });
 
   it('Should read events all events', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readAllEvents();
     assert(result.length > 0, `Expected events`);
@@ -38,7 +39,7 @@ describe('gRPC Client - $All Stream Events', () => {
   });
 
   it('Should read events reading forward', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readAllEventsForward();
     assert(result.events.length > 0, `Expected events`);
@@ -46,7 +47,7 @@ describe('gRPC Client - $All Stream Events', () => {
   });
 
   it('Should read events reading backward', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readAllEventsBackward();
     assert(result.events.length > 0, `Expected events`);
@@ -55,7 +56,7 @@ describe('gRPC Client - $All Stream Events', () => {
   });
 
   it('Should not get any events when start event is greater than the stream length', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readAllEventsForward({ commit: 9999999, prepare: 9999999 });
     assert.equal(result.events.length, 0);
@@ -64,7 +65,7 @@ describe('gRPC Client - $All Stream Events', () => {
   });
 
   it('Should read events reading backward with a count greater than the stream length', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const result = await client.readAllEventsBackward(undefined, 99999999);
     assert(result.events.length > 0, `Expected events`);
@@ -72,27 +73,30 @@ describe('gRPC Client - $All Stream Events', () => {
     await client.close();
   });
 
-  it('Should read events reading forward with a count greater than the stream length return a maximum of 4096', async function () {
-    this.timeout(40000);
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+  it(
+    'Should read events reading forward with a count greater than the stream length return a maximum of 4096',
+    async () => {
+      const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
-    const testStream = `TestStream-${generateEventId()}`;
-    const numberOfEvents = 5200;
-    const events = [];
+      const testStream = `TestStream-${generateEventId()}`;
+      const numberOfEvents = 5200;
+      const events = [];
 
-    for (let i = 1; i <= numberOfEvents; i++) {
-      events.push(
-        eventFactory.newEvent('TestEventType', {
-          something: i
-        })
-      );
-    }
+      for (let i = 1; i <= numberOfEvents; i++) {
+        events.push(
+          eventFactory.newEvent('TestEventType', {
+            something: i
+          })
+        );
+      }
 
-    await client.writeEvents(testStream, events);
-    const result = await client.readAllEventsForward(undefined, 5000);
-    // assert.equal(result.events.length, 4096);
-    assert.equal(result.events.length, 4076); // TODO: Figure out why this is not 4096 when running all tests together
+      await client.writeEvents(testStream, events);
+      const result = await client.readAllEventsForward(undefined, 5000);
+      // assert.equal(result.events.length, 4096);
+      assert.equal(result.events.length, 4076); // TODO: Figure out why this is not 4096 when running all tests together
 
-    await client.close();
-  });
+      await client.close();
+    },
+    { timeout: 40 * 1000 }
+  );
 });

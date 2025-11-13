@@ -1,12 +1,13 @@
 import './_globalHooks.js';
+import { describe, it } from 'node:test';
 
 import assert from 'assert';
 import getGRPCConfigCustomConnectionName from './support/getGRPCConfigCustomConnectionName.js';
 import generateEventId from '../lib/utilities/generateEventId.js';
 import getGRPCConfig from './support/getGRPCConfig.js';
-import EventStore from '../lib/index.js';
+import KurrentDB from '../lib/index.js';
 
-const eventFactory = new EventStore.EventFactory();
+const eventFactory = new KurrentDB.EventFactory();
 
 describe('gRPC Client - Test Connection', () => {
   const writeEventsInParallel = async (client, numberOfEvents = 20) => {
@@ -22,7 +23,7 @@ describe('gRPC Client - Test Connection', () => {
   };
 
   it('Should connect and write event on correct connection properties', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
     const testStream = `TestStream-${generateEventId()}`;
     await client.writeEvent(testStream, 'TestEventType', {
       something: '123'
@@ -32,7 +33,7 @@ describe('gRPC Client - Test Connection', () => {
   });
 
   it('Should connect and write event with custom connection name', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfigCustomConnectionName());
+    const client = new KurrentDB.GRPCClient(getGRPCConfigCustomConnectionName());
 
     const testStream = `TestStream-${generateEventId()}`;
     await client.writeEvent(testStream, 'TestEventType', {
@@ -52,13 +53,12 @@ describe('gRPC Client - Test Connection', () => {
     await client.close();
   });
 
-  it('Should not connect on incorrect hostname', function () {
-    this.timeout(60 * 1000);
+  it('Should not connect on incorrect hostname', () => {
     const config = getGRPCConfig();
     config.maxReconnections = 2;
     config.hostname = 'madetofailhostname.fakedomain.af';
 
-    const client = new EventStore.GRPCClient(config);
+    const client = new KurrentDB.GRPCClient(config);
 
     const testStream = `TestStream-${generateEventId()}`;
     return client
@@ -74,13 +74,12 @@ describe('gRPC Client - Test Connection', () => {
       .finally(() => client.close());
   });
 
-  it('Should not connect on incorrect port', function () {
-    this.timeout(60 * 1000);
+  it('Should not connect on incorrect port', () => {
     const config = getGRPCConfig();
     config.maxReconnections = 2;
     config.port = 9999;
 
-    const client = new EventStore.GRPCClient(config);
+    const client = new KurrentDB.GRPCClient(config);
 
     const testStream = `TestStream-${generateEventId()}`;
     return client
@@ -96,12 +95,11 @@ describe('gRPC Client - Test Connection', () => {
       .finally(() => client.close());
   });
 
-  it('Should default to only one connection with no pool options provided', async function () {
-    this.timeout(60 * 1000);
+  it('Should default to only one connection with no pool options provided', async () => {
     const config = getGRPCConfig();
     delete config.poolOptions;
     config.makeConfigUniqueWithThis = new Date().getTime();
-    const client = new EventStore.GRPCClient(config);
+    const client = new KurrentDB.GRPCClient(config);
 
     await writeEventsInParallel(client);
 
@@ -111,12 +109,11 @@ describe('gRPC Client - Test Connection', () => {
     await client.close();
   });
 
-  it('Should fill up pool connections to provided max', async function () {
-    this.timeout(60 * 1000);
+  it('Should fill up pool connections to provided max', async () => {
     const config = getGRPCConfig();
     config.poolOptions.max = 7;
     config.makeConfigUniqueWithThis = new Date().getTime();
-    const client = new EventStore.GRPCClient(config);
+    const client = new KurrentDB.GRPCClient(config);
 
     await writeEventsInParallel(client);
 
@@ -126,10 +123,9 @@ describe('gRPC Client - Test Connection', () => {
     await client.close();
   });
 
-  it('Should close pool', async function () {
-    this.timeout(60 * 1000);
+  it('Should close pool', async () => {
     const config = getGRPCConfig();
-    const client = new EventStore.GRPCClient(config);
+    const client = new KurrentDB.GRPCClient(config);
 
     const testStream = `TestStream-${generateEventId()}`;
     await client.writeEvent(testStream, 'TestEventType', {
@@ -147,10 +143,9 @@ describe('gRPC Client - Test Connection', () => {
     }
   });
 
-  it('Should close all pools', async function () {
-    this.timeout(60 * 1000);
+  it('Should close all pools', async () => {
     const config = getGRPCConfig();
-    const client = new EventStore.GRPCClient(config);
+    const client = new KurrentDB.GRPCClient(config);
 
     await client.closeAllPools();
 

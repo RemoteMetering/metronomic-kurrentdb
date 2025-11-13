@@ -1,15 +1,16 @@
 import './_globalHooks.js';
+import { describe, it } from 'node:test';
 
 import assert from 'assert';
 import generateEventId from '../lib/utilities/generateEventId.js';
 import getGRPCConfig from './support/getGRPCConfig.js';
-import EventStore from '../lib/index.js';
+import KurrentDB from '../lib/index.js';
 
-const eventFactory = new EventStore.EventFactory();
+const eventFactory = new KurrentDB.EventFactory();
 
 describe('gRPC Client - Get All Stream Events', () => {
   it('Should write events and read back all stream events', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const events = [];
     for (let k = 0; k < 1000; k++) {
@@ -32,7 +33,7 @@ describe('gRPC Client - Get All Stream Events', () => {
   }).timeout(5000);
 
   it('Should write events and read back all events from start event', async () => {
-    const client = new EventStore.GRPCClient(getGRPCConfig());
+    const client = new KurrentDB.GRPCClient(getGRPCConfig());
 
     const events = [];
     for (let k = 0; k < 1000; k++) {

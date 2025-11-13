@@ -7,16 +7,16 @@ A Node.js KurrentDB client API wrapper using promises
 > yarn add metronomic-kurrentdb-promise
 
 In your Node.js application:
-> const EventStore = require('metronomic-kurrentdb-promise');
+> const KurrentDB = require('metronomic-kurrentdb-promise');
 
 # HTTP Client
 
 # Config example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -29,9 +29,9 @@ const client = new EventStore.HTTPClient({
 # Config example - Secure
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	protocol: 'https',
 	hostname: 'localhost',
 	port: 2113,
@@ -71,9 +71,9 @@ Resolve linked events. Options: 'body' and 'rich'. Defaults to *body*
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -110,9 +110,9 @@ Resolve linked events. Options: 'body' and 'rich'. Defaults to *body*
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -147,9 +147,9 @@ Resolve linked events. Options: 'body' and 'rich'. Defaults to *body*
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -185,9 +185,9 @@ Resolve linked events. Options: 'body' and 'rich'. Defaults to *body*
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -224,10 +224,10 @@ Any options to be specified (as documented in GetEvent Store documentation). Def
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 const { v4: generateEventId } = require('uuid');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -251,7 +251,7 @@ The name of the stream to read from.
 
 ##### events
 The array of KurrentDB ready events to save.
-You can call ```new EventStore.EventFactory().newEvent('TestType', {something: 123});``` to get an KurrentDB ready event.
+You can call ```new KurrentDB.EventFactory().newEvent('TestType', {something: 123});``` to get an KurrentDB ready event.
 
 ##### options (optional)
 Any options to be specified (as documented in GetEvent Store documentation). Default is simply *ExpectedVersion = -2*.
@@ -259,10 +259,10 @@ Any options to be specified (as documented in GetEvent Store documentation). Def
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 const { v4: generateEventId } = require('uuid');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -271,7 +271,7 @@ const client = new EventStore.HTTPClient({
 	}
 });
 
-const events = [new EventStore.EventFactory().newEvent('TestEventType', { something: '456'})];
+const events = [new KurrentDB.EventFactory().newEvent('TestEventType', { something: '456'})];
 
 await client.writeEvents('TestStream-' + generateEventId(), events);
 const events = await client.getEvents(testStream);
@@ -289,9 +289,9 @@ The name of the stream to check.
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -318,9 +318,9 @@ Hard delete the stream, defaults to false
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -345,9 +345,9 @@ Performs Ping command, rejects promise if unsuccessful
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -531,9 +531,9 @@ The name of the partition to retrieve.
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -558,9 +558,9 @@ If the promise is fulfilled then the scavenge command has been sent, it does not
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -584,9 +584,9 @@ If the promise is fulfilled then the shutdown command has been sent, it does not
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.HTTPClient({
+const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
 	port: 2113,
 	credentials: {
@@ -612,7 +612,7 @@ Github: [https://github.com/nicdex/node-eventstore-client](https://github.com/ni
 # Config example
 
 ```javascript
-const client = new EventStore.TCPClient({
+const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
 	port: 1113,
 	credentials: {
@@ -629,7 +629,7 @@ const client = new EventStore.TCPClient({
 # Config example - Secure
 
 ```javascript
-const client = new EventStore.TCPClient({
+const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
 	port: 1113,
 	useSslConnection: true,
@@ -650,7 +650,7 @@ const client = new EventStore.TCPClient({
 ```javascript
 const { v4: generateId } = require('uuid');
 
-const client = new EventStore.TCPClient({
+const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
 	port: 1113,
 	credentials: {
@@ -668,7 +668,7 @@ const client = new EventStore.TCPClient({
 # Config example - Clustering - Gossip Seeds
 
 ```javascript
-const client = new EventStore.TCPClient({
+const client = new KurrentDB.TCPClient({
 	gossipSeeds: [
 		{ hostname: '192.168.0.10', port: 2113 },
 		{ hostname: '192.168.0.11', port: 2113 },
@@ -688,7 +688,7 @@ const client = new EventStore.TCPClient({
 # Config example - Clustering - DNS Discovery
 
 ```javascript
-const client = new EventStore.TCPClient({
+const client = new KurrentDB.TCPClient({
 	protocol: 'discover',
 	hostname: 'my.host',
 	port: 2113,
@@ -742,9 +742,9 @@ Resolve linked events. Defaults to *true*
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.TCPClient({
+const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
 	port: 1113,
 	credentials: {
@@ -777,9 +777,9 @@ Resolve linked events. Defaults to *true*
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.TCPClient({
+const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
 	port: 1113,
 	credentials: {
@@ -812,9 +812,9 @@ Resolve linked events
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.TCPClient({
+const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
 	port: 1113,
 	credentials: {
@@ -868,9 +868,9 @@ debug - in debug mode(true/false)
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.TCPClient({
+const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
 	port: 1113,
 	credentials: {
@@ -925,9 +925,9 @@ The number of events to read per enumeration.
 #### Example
 
 ```javascript
-const EventStore = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('metronomic-kurrentdb-promise');
 
-const client = new EventStore.TCPClient({
+const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
 	port: 1113,
 	credentials: {

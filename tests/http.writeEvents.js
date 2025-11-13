@@ -1,15 +1,16 @@
 import './_globalHooks.js';
+import { describe, it } from 'node:test';
 
 import assert from 'assert';
 import generateEventId from '../lib/utilities/generateEventId.js';
 import getHttpConfig from './support/getHttpConfig.js';
-import EventStore from '../lib/index.js';
+import KurrentDB from '../lib/index.js';
 
-const eventFactory = new EventStore.EventFactory();
+const eventFactory = new KurrentDB.EventFactory();
 
 describe('Http Client - Write Events', () => {
   it('Write to a new stream and read the events', async () => {
-    const client = new EventStore.HTTPClient(getHttpConfig());
+    const client = new KurrentDB.HTTPClient(getHttpConfig());
 
     const events = [
       eventFactory.newEvent('TestEventType', {
@@ -24,7 +25,7 @@ describe('Http Client - Write Events', () => {
   });
 
   it('Write to a new stream and read the events by type', async () => {
-    const client = new EventStore.HTTPClient(getHttpConfig());
+    const client = new KurrentDB.HTTPClient(getHttpConfig());
 
     const events = [
       eventFactory.newEvent('TestEventType', {
@@ -45,7 +46,7 @@ describe('Http Client - Write Events', () => {
   });
 
   it('Should not fail promise if no events provided', () => {
-    const client = new EventStore.HTTPClient(getHttpConfig());
+    const client = new KurrentDB.HTTPClient(getHttpConfig());
 
     const events = [];
 
@@ -54,7 +55,7 @@ describe('Http Client - Write Events', () => {
   });
 
   it('Should fail promise if non array provided', () => {
-    const client = new EventStore.HTTPClient(getHttpConfig());
+    const client = new KurrentDB.HTTPClient(getHttpConfig());
 
     const events = {
       something: 'here'
@@ -80,7 +81,7 @@ describe('Http Client - Write Events to pre-populated stream', () => {
   let events2;
 
   beforeEach(async () => {
-    client = new EventStore.HTTPClient(getHttpConfig());
+    client = new KurrentDB.HTTPClient(getHttpConfig());
 
     events = [
       eventFactory.newEvent('TestEventType', {

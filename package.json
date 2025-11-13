@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "pnpm test:insecure && pnpm test:secure",
-    "test:insecure": "NODE_ENV=test mocha --exit tests/*",
-    "test:secure": "NODE_ENV=test TESTS_RUN_SECURE=true mocha --exit tests/*",
+    "test:insecure": "NODE_ENV=test node --test tests/*",
+    "test:secure": "NODE_ENV=test TESTS_RUN_SECURE=true node --test tests/*",
     "coverage": "nyc pnpm run test",
     "lint": "eslint --fix --ext .js,.mjs,.cjs ."
   },
@@ -43,11 +43,10 @@
     "@rms/eslint-config": "^0.0.52",
     "@rms/prettier-config": "^0.0.12",
     "eslint": "^9.39.1",
-    "mocha": "^11.7.5",
     "nyc": "^17.1.0"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=24.0.0"
   },
   "nyc": {
     "reporter": [
