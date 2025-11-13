@@ -58,13 +58,13 @@ describe('gRPC Client - Stress Tests', () => {
 
     events.forEach((ev) => {
       client.writeEvent(testStream, ev.eventType, ev.data).then(() => {
-        writeCount++;
+        writeCount += 1;
         checkCounts();
       });
     });
     events.forEach(() => {
       client.getEvents(testStream, undefined, 10).then(() => {
-        readCount++;
+        readCount += 1;
         checkCounts();
       });
     });

@@ -8,15 +8,15 @@ import EventStore from '../lib/index.js';
 const eventFactory = new EventStore.EventFactory();
 
 describe('gRPC Client - $All Stream Events', () => {
-  const testStream = `TestStream-${generateEventId()}`;
-  const numberOfEvents = 10;
+  const globalTestStream = `TestStream-${generateEventId()}`;
+  const globalNumberOfEvents = 10;
 
   before(async () => {
     const client = new EventStore.GRPCClient(getGRPCConfig());
 
     const events = [];
 
-    for (let i = 1; i <= numberOfEvents; i++) {
+    for (let i = 1; i <= globalNumberOfEvents; i++) {
       events.push(
         eventFactory.newEvent('TestEventType', {
           something: i
@@ -24,7 +24,7 @@ describe('gRPC Client - $All Stream Events', () => {
       );
     }
 
-    await client.writeEvents(testStream, events);
+    await client.writeEvents(globalTestStream, events);
 
     await client.close();
   });

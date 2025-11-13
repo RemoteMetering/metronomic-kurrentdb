@@ -17,7 +17,7 @@ describe('gRPC Client - Subscribe To Stream', () => {
     let hasPassed = false;
 
     function onEventAppeared() {
-      processedEventCount++;
+      processedEventCount += 1;
     }
 
     async function onDropped() {
@@ -75,8 +75,8 @@ describe('gRPC Client - Subscribe To Stream', () => {
 
     let processedEventCount1 = 0;
     let processedEventCount2 = 0;
-    const onEv1 = () => processedEventCount1++;
-    const onEv2 = () => processedEventCount2++;
+    const onEv1 = () => (processedEventCount1 += 1);
+    const onEv2 = () => (processedEventCount2 += 1);
     const sub1 = await client.subscribeToStream(testStream, onEv1, () => {});
     const sub2 = await client.subscribeToStream(testStream, onEv2, () => {});
     await sleep(3000);

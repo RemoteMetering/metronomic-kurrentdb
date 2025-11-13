@@ -19,7 +19,7 @@ xdescribe('gRPC Client - Persistent Subscription', () => {
 
     function onEventAppeared(sub, ev) {
       sub.ack(ev);
-      processedEventCount++;
+      processedEventCount += 1;
     }
 
     async function onDropped() {
@@ -86,8 +86,8 @@ xdescribe('gRPC Client - Persistent Subscription', () => {
 
     let processedEventCount1 = 0;
     let processedEventCount2 = 0;
-    const onEv1 = () => processedEventCount1++;
-    const onEv2 = () => processedEventCount2++;
+    const onEv1 = () => (processedEventCount1 += 1);
+    const onEv2 = () => (processedEventCount2 += 1);
     const sub1 = await client.subscribeToPersistentSubscriptionToStream(testStream, groupNameOne, onEv1, () => {});
     const sub2 = await client.subscribeToPersistentSubscriptionToStream(testStream, groupNameTwo, onEv2, () => {});
     await sleep(3000);

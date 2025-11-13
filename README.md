@@ -824,7 +824,7 @@ const client = new EventStore.TCPClient({
 });
 
 function onEventAppeared(subscription, ev) {
-	processedEventCount++;
+	processedEventCount += 1;
 	return;
 };
 
@@ -882,7 +882,7 @@ const client = new EventStore.TCPClient({
 let processedEventCount = 0;
 
 function onEventAppeared(subscription, ev) {
-    processedEventCount++;
+    processedEventCount += 1;
     return;
 };
 

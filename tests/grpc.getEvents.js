@@ -8,15 +8,15 @@ import EventStore from '../lib/index.js';
 const eventFactory = new EventStore.EventFactory();
 
 describe('gRPC Client - Get Events', () => {
-  const testStream = `TestStream-${generateEventId()}`;
-  const numberOfEvents = 10;
+  const globalTestStream = `TestStream-${generateEventId()}`;
+  const globalNumberOfEvents = 10;
 
   before(async () => {
     const client = new EventStore.GRPCClient(getGRPCConfig());
 
     const events = [];
 
-    for (let i = 1; i <= numberOfEvents; i++) {
+    for (let i = 1; i <= globalNumberOfEvents; i++) {
       events.push(
         eventFactory.newEvent('TestEventType', {
           something: i
@@ -24,7 +24,7 @@ describe('gRPC Client - Get Events', () => {
       );
     }
 
-    await client.writeEvents(testStream, events);
+    await client.writeEvents(globalTestStream, events);
 
     await client.close();
   });
@@ -32,7 +32,7 @@ describe('gRPC Client - Get Events', () => {
   it('Should get events reading forward', async () => {
     const client = new EventStore.GRPCClient(getGRPCConfig());
 
-    const events = await client.getEvents(testStream, undefined, undefined, 'forward');
+    const events = await client.getEvents(globalTestStream, undefined, undefined, 'forward');
     assert.equal(events.length, 10);
     assert.equal(events[0].data.something, 1);
     assert.equal('TestEventType', events[0].eventType);
@@ -46,7 +46,7 @@ describe('gRPC Client - Get Events', () => {
   it('Should get events reading backward', async () => {
     const client = new EventStore.GRPCClient(getGRPCConfig());
 
-    const events = await client.getEvents(testStream, undefined, undefined, 'backward');
+    const events = await client.getEvents(globalTestStream, undefined, undefined, 'backward');
     assert.equal(events.length, 10);
     assert.equal(events[0].data.something, 10);
 

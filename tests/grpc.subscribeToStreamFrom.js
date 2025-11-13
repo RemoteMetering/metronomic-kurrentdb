@@ -17,7 +17,7 @@ describe('gRPC Client - Subscribe To Stream From', () => {
     let hasPassed = false;
 
     function onEventAppeared() {
-      processedEventCount++;
+      processedEventCount += 1;
     }
 
     function onDropped() {

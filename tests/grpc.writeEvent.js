@@ -110,7 +110,7 @@ describe('gRPC Client - Write Event to pre-populated stream', () => {
           expectedVersion: null
         }
       );
-    } catch (err) {
+    } catch {
       assert.fail('Write should not have failed');
     }
   });

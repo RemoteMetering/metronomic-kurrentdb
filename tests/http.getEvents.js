@@ -8,27 +8,27 @@ import EventStore from '../lib/index.js';
 const eventFactory = new EventStore.EventFactory();
 
 describe('Http Client - Get Events', () => {
-  const testStream = `TestStream-${generateEventId()}`;
-  const numberOfEvents = 10;
+  const globalTestStream = `TestStream-${generateEventId()}`;
+  const globalNumberOfEvents = 10;
 
   before(() => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
     const events = [];
-    for (let i = 1; i <= numberOfEvents; i++) {
+    for (let i = 1; i <= globalNumberOfEvents; i++) {
       events.push(
         eventFactory.newEvent('TestEventType', {
           something: i
         })
       );
     }
-    return client.writeEvents(testStream, events);
+    return client.writeEvents(globalTestStream, events);
   });
 
   it('Should get events reading forward', async () => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
-    const events = await client.getEvents(testStream, undefined, undefined, 'forward');
+    const events = await client.getEvents(globalTestStream, undefined, undefined, 'forward');
     assert.equal(events.length, 10);
     assert(events[0].created, 'Created should be defined');
     assert.equal(events[0].data.something, 1);
@@ -37,7 +37,7 @@ describe('Http Client - Get Events', () => {
   it('Should get events reading backward', async () => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
-    const events = await client.getEvents(testStream, 'head', undefined, 'backward');
+    const events = await client.getEvents(globalTestStream, 'head', undefined, 'backward');
     assert.equal(events.length, 10);
     assert.equal(events[0].data.something, 10);
   });

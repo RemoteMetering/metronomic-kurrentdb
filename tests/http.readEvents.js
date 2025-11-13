@@ -9,27 +9,27 @@ import EventStore from '../lib/index.js';
 const eventFactory = new EventStore.EventFactory();
 
 describe('Http Client - Read Events', () => {
-  const testStream = `TestStream-${generateEventId()}`;
-  const numberOfEvents = 10;
+  const globalTestStream = `TestStream-${generateEventId()}`;
+  const globalNumberOfEvents = 10;
 
   before(() => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
     const events = [];
-    for (let i = 1; i <= numberOfEvents; i++) {
+    for (let i = 1; i <= globalNumberOfEvents; i++) {
       events.push(
         eventFactory.newEvent('TestEventType', {
           something: i
         })
       );
     }
-    return client.writeEvents(testStream, events);
+    return client.writeEvents(globalTestStream, events);
   });
 
   it('Should read events reading forward', async () => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
-    const result = await client.readEventsForward(testStream);
+    const result = await client.readEventsForward(globalTestStream);
     assert.equal(result.events.length, 10);
     assert(result.events[0].created, 'Created should be defined');
     assert.equal(result.events[0].data.something, 1);
@@ -38,7 +38,7 @@ describe('Http Client - Read Events', () => {
   it('Should read events reading backward', async () => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
-    const result = await client.readEventsBackward(testStream);
+    const result = await client.readEventsBackward(globalTestStream);
     assert.equal(result.events.length, 10);
     assert.equal(result.events[0].data.something, 10);
   });
@@ -46,7 +46,7 @@ describe('Http Client - Read Events', () => {
   it('Should read last event reading backward with larger size than events', async () => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
-    const result = await client.readEventsBackward(testStream, 0, 250);
+    const result = await client.readEventsBackward(globalTestStream, 0, 250);
     assert.equal(result.events.length, 1);
     assert.equal(result.events[0].data.something, 1);
   });
@@ -54,14 +54,14 @@ describe('Http Client - Read Events', () => {
   it('Should not get any events when start event is greater than the stream length', async () => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
-    const result = await client.readEventsForward(testStream, 11);
+    const result = await client.readEventsForward(globalTestStream, 11);
     assert.equal(result.events.length, 0);
   });
 
   it('Should read events reading backward from a start position', async () => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
-    const result = await client.readEventsBackward(testStream, 2);
+    const result = await client.readEventsBackward(globalTestStream, 2);
     assert.equal(result.events.length, 3);
     assert.equal(result.events[0].data.something, 3);
   });
@@ -69,7 +69,7 @@ describe('Http Client - Read Events', () => {
   it('Should read events reading backward with a count greater than the stream length', async () => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
-    const result = await client.readEventsBackward(testStream, undefined, 10000);
+    const result = await client.readEventsBackward(globalTestStream, undefined, 10000);
     assert.equal(result.events.length, 10);
     assert.equal(result.events[0].data.something, 10);
   });
@@ -122,7 +122,7 @@ describe('Http Client - Read Events', () => {
   it('Should read events reading backward with embed type rich', async () => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
-    const result = await client.readEventsBackward(testStream, 2, undefined, true, 'rich');
+    const result = await client.readEventsBackward(globalTestStream, 2, undefined, true, 'rich');
     assert.equal(result.events.length, 3);
     assert.equal(result.events[0].data, undefined);
   });
@@ -130,12 +130,12 @@ describe('Http Client - Read Events', () => {
   it('Should read events and set additional meta properties', async () => {
     const client = new EventStore.HTTPClient(getHttpConfig());
 
-    let result = await client.readEventsForward(testStream, 2, 2);
+    let result = await client.readEventsForward(globalTestStream, 2, 2);
     assert.equal(result.readDirection, 'forward');
     assert.equal(result.fromEventNumber, 2);
     assert.equal(result.nextEventNumber, 4);
 
-    result = await client.readEventsBackward(testStream, 3, 2);
+    result = await client.readEventsBackward(globalTestStream, 3, 2);
     assert.equal(result.readDirection, 'backward');
     assert.equal(result.fromEventNumber, 3);
     assert.equal(result.nextEventNumber, 1);

@@ -127,7 +127,7 @@ describe('TCP Client - Write Events to pre-populated stream', () => {
       await client.writeEvents(testStream, events2, {
         expectedVersion: null
       });
-    } catch (err) {
+    } catch {
       assert.fail('Write should not have failed');
     }
   });
