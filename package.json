@@ -1,66 +1,66 @@
 {
-	"name": "geteventstore-promise",
-	"version": "4.0.1",
-	"description": "GetEventStore client wrapper using promises",
-	"main": "index.js",
-	"scripts": {
-		"test": "yarn test:insecure && yarn test:secure",
-		"test:insecure": "NODE_ENV=test mocha --exit --require @babel/register tests/",
-		"test:secure": "NODE_ENV=test TESTS_RUN_SECURE=true mocha --exit --require @babel/register tests/",
-		"coverage": "nyc yarn test",
-		"build": "babel --delete-dir-on-start -d dist/ lib"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/RemoteMetering/geteventstore-promise.git"
-	},
-	"keywords": [
-		"node",
-		"client",
-		"event store",
-		"geteventstore",
-		"eventstore",
-		"promise"
-	],
-	"author": "Remote Metering Solutions Team",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/RemoteMetering/geteventstore-promise/issues"
-	},
-	"homepage": "https://github.com/RemoteMetering/geteventstore-promise",
-	"dependencies": {
-		"@babel/runtime": "^7.28.3",
-		"@kurrent/kurrentdb-client": "^1.0.1",
-		"axios": "^1.11.0",
-		"debug": "^4.4.1",
-		"generic-pool": "^3.9.0",
-		"lodash.clonedeep": "^4.5.0",
-		"node-eventstore-client": "^23.10.1",
-		"uuid": "^11.1.0"
-	},
-	"devDependencies": {
-		"@babel/cli": "^7.28.3",
-		"@babel/core": "^7.28.3",
-		"@babel/node": "^7.28.0",
-		"@babel/plugin-transform-runtime": "^7.28.3",
-		"@babel/preset-env": "^7.28.3",
-		"@babel/register": "^7.28.3",
-		"babel-plugin-add-module-exports": "^1.0.4",
-		"mocha": "^11.7.1",
-		"nyc": "^17.1.0"
-	},
-	"nyc": {
-		"reporter": [
-			"lcov",
-			"text",
-			"html"
-		],
-		"include": [
-			"lib/*"
-		],
-		"exclude": [
-			"lib/AggRoot.js"
-		],
-		"all": true
-	}
+  "name": "@metronomic/kurrentdb",
+  "version": "1.0.0",
+  "description": "KurrentDB Wrapper",
+  "main": "lib/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "yarn test:insecure && yarn test:secure",
+    "test:insecure": "NODE_ENV=test mocha --exit tests/",
+    "test:secure": "NODE_ENV=test TESTS_RUN_SECURE=true mocha --exit tests/",
+    "coverage": "nyc pnpm run test",
+    "lint": "eslint --fix --ext .js,.mjs,.cjs ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RemoteMetering/metronomic-kurrentdb.git"
+  },
+  "keywords": [
+    "node",
+    "client",
+    "kurrent",
+    "kurrent db",
+    "metronomic-kurrentdb"
+  ],
+  "author": "METRONOMIC (Pty) Ltd",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RemoteMetering/metronomic-kurrentdb/issues"
+  },
+  "homepage": "https://github.com/RemoteMetering/metronomic-kurrentdb",
+  "dependencies": {
+    "@kurrent/kurrentdb-client": "^1.1.0",
+    "axios": "^1.13.2",
+    "debug": "^4.4.3",
+    "generic-pool": "^3.9.0",
+    "lodash.clonedeep": "^4.5.0",
+    "node-eventstore-client": "^23.10.1",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.39.1",
+    "@rms/eslint-config": "^0.0.52",
+    "@rms/prettier-config": "^0.0.12",
+    "eslint": "^9.39.1",
+    "mocha": "^11.7.5",
+    "nyc": "^17.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text",
+      "html"
+    ],
+    "include": [
+      "lib/*"
+    ],
+    "exclude": [
+      "lib/AggRoot.js"
+    ],
+    "all": true
+  }
 }
