@@ -1,4 +1,3 @@
-import './_globalHooks.js';
 import { describe, it } from 'node:test';
 
 import assert from 'assert';
@@ -12,7 +11,7 @@ describe('TCP Client - Config', () => {
       done('Config should not pass assertion');
     } catch (err) {
       assert.equal(err === undefined, false);
-      assert.equal(err.message, 'metronomic-kurrentdb-promise - TCP client - config not provided');
+      assert.equal(err.message, 'metronomic-kurrentdb - TCP client - config not provided');
       done();
     }
   });
@@ -30,7 +29,7 @@ describe('TCP Client - Config', () => {
       done();
     } catch (err) {
       assert.equal(err === undefined, false);
-      assert.equal(err.message, 'metronomic-kurrentdb-promise - TCP client - hostname property not provided');
+      assert.equal(err.message, 'metronomic-kurrentdb - TCP client - hostname property not provided');
       done();
     }
   });
@@ -45,7 +44,7 @@ describe('TCP Client - Config', () => {
       done();
     } catch (err) {
       assert.equal(err === undefined, false);
-      assert.equal(err.message, 'metronomic-kurrentdb-promise - TCP client - credentials property not provided');
+      assert.equal(err.message, 'metronomic-kurrentdb - TCP client - credentials property not provided');
       done();
     }
   });

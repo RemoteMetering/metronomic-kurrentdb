@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "pnpm test:insecure && pnpm test:secure",
-    "test:insecure": "NODE_ENV=test node --test tests/*",
-    "test:secure": "NODE_ENV=test TESTS_RUN_SECURE=true node --test tests/*",
-    "coverage": "nyc pnpm run test",
+    "test:insecure": "NODE_ENV=test node --test --test-global-setup=tests/_globalHooks.js tests/*",
+    "test:secure": "NODE_ENV=test TESTS_RUN_SECURE=true node --test --test-global-setup=tests/_globalHooks.js tests/*",
+    "coverage": "pnpm run test",
     "lint": "eslint --fix --ext .js,.mjs,.cjs ."
   },
   "repository": {
@@ -42,24 +42,9 @@
     "@eslint/js": "^9.39.1",
     "@rms/eslint-config": "^0.0.52",
     "@rms/prettier-config": "^0.0.12",
-    "eslint": "^9.39.1",
-    "nyc": "^17.1.0"
+    "eslint": "^9.39.1"
   },
   "engines": {
     "node": ">=24.0.0"
-  },
-  "nyc": {
-    "reporter": [
-      "lcov",
-      "text",
-      "html"
-    ],
-    "include": [
-      "lib/*"
-    ],
-    "exclude": [
-      "lib/AggRoot.js"
-    ],
-    "all": true
   }
 }

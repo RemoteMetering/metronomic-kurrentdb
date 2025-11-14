@@ -7,29 +7,31 @@ services:
       PROVISION_DIRECTORIES: "1000:1000:0755:/tmp/certs"
     volumes:
       - certs:/tmp/certs
-    network_mode: none
+    networks:
+      singleclusternetwork:
+        ipv4_address: 172.30.239.4
 
-  metronomic-kurrentdb_promise_test_setup_certs_single:
+  kurrentdb_test_setup_certs_single:
     image: eventstore/es-gencert-cli:1.0.2
     entrypoint: bash
-    user: "0:0"
+    user: "1000:1000"
     command: >
       -c "mkdir -p ./certs && cd /certs
       && es-gencert-cli create-ca
       && es-gencert-cli create-node -out ./single -ip-addresses 127.0.0.1,172.30.239.11 -dns-names localhost
       && find . -type f -print0 | xargs -0 chmod 666"
-    container_name: metronomic-kurrentdb_promise_test_setup_certs_single
+    container_name: kurrentdb_test_setup_certs_single
     volumes:
-      - ./certs:/certs
+      - certs:/certs
     depends_on:
       - volumes-provisioner
     networks:
       singleclusternetwork:
-        ipv4_address: 172.30.239.10
+        ipv4_address: 172.30.239.5
 
-  metronomic-kurrentdb_promise_test_single.kurrent:
-    image: kurrentplatform/kurrentdb:25.0
-    container_name: metronomic-kurrentdb_promise_test_single.kurrent
+  kurrentdb_test_single:
+    image: kurrentplatform/kurrentdb:25.1
+    container_name: kurrentdb_test_single.kurrent
     environment:
       - KURRENTDB_MEM_DB=true
       - KURRENTDB_CLUSTER_SIZE=1
@@ -44,14 +46,14 @@ services:
       - KURRENTDB_CERTIFICATE_FILE=/certs/single/node.crt
       - KURRENTDB_CERTIFICATE_PRIVATE_KEY_FILE=/certs/single/node.key
       # Added for when testing v5
-      - KURRENTDB_EXT_NODE_PORT_ADVERTISE_AS=2117
+    #   - KURRENTDB_EXT_NODE_PORT_ADVERTISE_AS=2117
     ports:
       - "11116:1113"
       - "22117:2113"
     volumes:
-      - ./certs:/certs
+      - certs:/certs
     depends_on:
-      - metronomic-kurrentdb_promise_test_setup_certs_single
+      - kurrentdb_test_setup_certs_single
     restart: always
     networks:
       singleclusternetwork:
@@ -59,9 +61,12 @@ services:
 
 networks:
   singleclusternetwork:
-    name: metronomic-kurrentdb_promise_test_single_eventstoredb.local
+    name: kurrentdb_test_single_secure.local
     driver: bridge
     ipam:
       driver: default
       config:
         - subnet: 172.30.239.0/24
+
+volumes:
+  certs:

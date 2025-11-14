@@ -1,4 +1,3 @@
-import './_globalHooks.js';
 import { describe, it } from 'node:test';
 
 import getHttpConfig from './support/getHttpConfig.js';

@@ -1,4 +1,3 @@
-import './_globalHooks.js';
 import { describe, it, before } from 'node:test';
 
 import assert from 'assert';

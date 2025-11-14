@@ -1,4 +1,3 @@
-import './_globalHooks.js';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 

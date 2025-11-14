@@ -1,20 +1,20 @@
-# metronomic-kurrentdb-promise
+# metronomic-kurrentdb
 A Node.js KurrentDB client API wrapper using promises
 
-[![NPM](https://nodei.co/npm/metronomic-kurrentdb-promise.png?stars&downloads&downloadRank)](https://nodei.co/npm/metronomic-kurrentdb-promise/)
+[![NPM](https://nodei.co/npm/metronomic-kurrentdb.png?stars&downloads&downloadRank)](https://nodei.co/npm/metronomic-kurrentdb/)
 
 # Installation
-> yarn add metronomic-kurrentdb-promise
+> yarn add metronomic-kurrentdb
 
 In your Node.js application:
-> const KurrentDB = require('metronomic-kurrentdb-promise');
+> const KurrentDB = require('@metronomic/kurrentdb');
 
 # HTTP Client
 
 # Config example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
@@ -29,7 +29,7 @@ const client = new KurrentDB.HTTPClient({
 # Config example - Secure
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	protocol: 'https',
@@ -71,7 +71,7 @@ Resolve linked events. Options: 'body' and 'rich'. Defaults to *body*
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
@@ -110,7 +110,7 @@ Resolve linked events. Options: 'body' and 'rich'. Defaults to *body*
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
@@ -147,7 +147,7 @@ Resolve linked events. Options: 'body' and 'rich'. Defaults to *body*
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
@@ -185,7 +185,7 @@ Resolve linked events. Options: 'body' and 'rich'. Defaults to *body*
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
@@ -224,7 +224,7 @@ Any options to be specified (as documented in GetEvent Store documentation). Def
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 const { v4: generateEventId } = require('uuid');
 
 const client = new KurrentDB.HTTPClient({
@@ -259,7 +259,7 @@ Any options to be specified (as documented in GetEvent Store documentation). Def
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 const { v4: generateEventId } = require('uuid');
 
 const client = new KurrentDB.HTTPClient({
@@ -289,7 +289,7 @@ The name of the stream to check.
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
@@ -318,7 +318,7 @@ Hard delete the stream, defaults to false
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
@@ -345,7 +345,7 @@ Performs Ping command, rejects promise if unsuccessful
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
@@ -531,7 +531,7 @@ The name of the partition to retrieve.
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
@@ -558,7 +558,7 @@ If the promise is fulfilled then the scavenge command has been sent, it does not
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
@@ -584,7 +584,7 @@ If the promise is fulfilled then the shutdown command has been sent, it does not
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.HTTPClient({
 	hostname: 'localhost',
@@ -742,7 +742,7 @@ Resolve linked events. Defaults to *true*
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
@@ -777,7 +777,7 @@ Resolve linked events. Defaults to *true*
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
@@ -812,7 +812,7 @@ Resolve linked events
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
@@ -868,7 +868,7 @@ debug - in debug mode(true/false)
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',
@@ -925,7 +925,7 @@ The number of events to read per enumeration.
 #### Example
 
 ```javascript
-const KurrentDB = require('metronomic-kurrentdb-promise');
+const KurrentDB = require('@metronomic/kurrentdb');
 
 const client = new KurrentDB.TCPClient({
 	hostname: 'localhost',

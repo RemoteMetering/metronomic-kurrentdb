@@ -7,12 +7,14 @@ services:
       PROVISION_DIRECTORIES: "1000:1000:0755:/tmp/certs"
     volumes:
       - certs:/tmp/certs
-    network_mode: none
+    networks:
+      clusternetwork:
+        ipv4_address: 172.30.240.4
 
-  metronomic-kurrentdb_promise_test_setup_certs_cluster:
-    image: kurrentdb/es-gencert-cli:1.0.2
+  kurrentdb_test_setup_certs_cluster:
+    image: eventstore/es-gencert-cli:1.0.2
     entrypoint: bash
-    user: "0:0"
+    user: "1000:1000"
     command: >
       -c "mkdir -p ./certs && cd /certs
       && es-gencert-cli create-ca
@@ -20,16 +22,15 @@ services:
       && es-gencert-cli create-node -out ./node2 -ip-addresses 127.0.0.1,172.30.240.12 -dns-names localhost
       && es-gencert-cli create-node -out ./node3 -ip-addresses 127.0.0.1,172.30.240.13 -dns-names localhost
       && find . -type f -print0 | xargs -0 chmod 666"
-    container_name: metronomic-kurrentdb_promise_test_setup_certs_cluster
+    container_name: kurrentdb_test_setup_certs_cluster
     volumes:
-      - ./certs:/certs
-    networks:
-      clusternetwork:
-        ipv4_address: 172.30.240.10
+      - certs:/certs
+    depends_on:
+      - volumes-provisioner
 
-  metronomic-kurrentdb_promise_test_cluster_node1.kurrentdb: &template
-    image: kurrentplatform/kurrentdb:25.0
-    container_name: metronomic-kurrentdb_promise_test_cluster_node1.kurrentdb
+  kurrentdb_test_cluster_node1: &template
+    image: kurrentplatform/kurrentdb:25.1
+    container_name: kurrentdb_test_cluster_node1
     command: --node-priority=1
     env_file:
       - vars.env
@@ -44,7 +45,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl --fail --insecure http://metronomic-kurrentdb_promise_test_cluster_node1.kurrentdb:2113/health/live || exit 1",
+          "curl --fail --insecure http://kurrentdb_test_cluster_node1:2113/health/live || exit 1",
         ]
       interval: 5s
       timeout: 5s
@@ -53,17 +54,17 @@ services:
       - "11136:1113"
       - "22137:2113"
     volumes:
-      - ./certs:/certs
+      - certs:/certs
     depends_on:
-      - volumes-provisioner
+      - kurrentdb_test_setup_certs_cluster
     restart: always
     networks:
       clusternetwork:
         ipv4_address: 172.30.240.11
 
-  metronomic-kurrentdb_promise_test_cluster_node2.kurrentdb:
+  kurrentdb_test_cluster_node2:
     <<: *template
-    container_name: metronomic-kurrentdb_promise_test_cluster_node2.kurrentdb
+    container_name: kurrentdb_test_cluster_node2
     command: --node-priority=2
     environment:
       - KURRENTDB_REPLICATION_IP=172.30.240.12
@@ -76,7 +77,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl --fail --insecure http://metronomic-kurrentdb_promise_test_cluster_node2.kurrentdb:2113/health/live || exit 1",
+          "curl --fail --insecure http://kurrentdb_test_cluster_node2:2113/health/live || exit 1",
         ]
       interval: 5s
       timeout: 5s
@@ -88,9 +89,9 @@ services:
       clusternetwork:
         ipv4_address: 172.30.240.12
 
-  metronomic-kurrentdb_promise_test_cluster_node3.kurrentdb:
+  kurrentdb_test_cluster_node3:
     <<: *template
-    container_name: metronomic-kurrentdb_promise_test_cluster_node3.kurrentdb
+    container_name: kurrentdb_test_cluster_node3
     command: --node-priority=3
     environment:
       - KURRENTDB_REPLICATION_IP=172.30.240.13
@@ -103,7 +104,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl --fail --insecure http://metronomic-kurrentdb_promise_test_cluster_node3.kurrentdb:2113/health/live || exit 1",
+          "curl --fail --insecure http://kurrentdb_test_cluster_node3:2113/health/live || exit 1",
         ]
       interval: 5s
       timeout: 5s
@@ -117,9 +118,12 @@ services:
 
 networks:
   clusternetwork:
-    name: metronomic-kurrentdb_promise_test_cluster_kurrentdbdb.local
+    name: kurrentdb_test_cluster_secure.local
     driver: bridge
     ipam:
       driver: default
       config:
         - subnet: 172.30.240.0/24
+
+volumes:
+  certs:
