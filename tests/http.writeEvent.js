@@ -1,5 +1,5 @@
 import './_globalHooks.js';
-import { describe, it } from 'node:test';
+import { describe, it, beforeEach } from 'node:test';
 
 import assert from 'assert';
 import generateEventId from '../lib/utilities/generateEventId.js';
