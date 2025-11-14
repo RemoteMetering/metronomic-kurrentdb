@@ -6,7 +6,7 @@ services:
     environment:
       PROVISION_DIRECTORIES: "1000:1000:0755:/tmp/certs"
     volumes:
-      - certs:/tmp/certs
+      - ./certs:/tmp/certs
     networks:
       clusternetwork:
         ipv4_address: 172.30.240.4
@@ -24,7 +24,7 @@ services:
       && find . -type f -print0 | xargs -0 chmod 666"
     container_name: kurrentdb_test_setup_certs_cluster
     volumes:
-      - certs:/certs
+      - ./certs:/certs
     depends_on:
       - volumes-provisioner
 
@@ -54,7 +54,7 @@ services:
       - "11136:1113"
       - "22137:2113"
     volumes:
-      - certs:/certs
+      - ./certs:/certs
     depends_on:
       - kurrentdb_test_setup_certs_cluster
     restart: always

@@ -1,3 +1,4 @@
+import { runningTestsInSecureMode } from '../_globalHooks.js';
 import { fileURLToPath } from 'node:url';
 import path from 'path';
 
@@ -6,8 +7,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default () => ({
   hostname: process.env.ES_HOST || 'localhost',
   port: 22117,
-  useSslConnection: global.runningTestsInSecureMode,
-  tlsCAFile: global.runningTestsInSecureMode ? path.resolve(__dirname, './single/certs/ca/ca.crt') : undefined,
+  useSslConnection: runningTestsInSecureMode,
+  tlsCAFile: runningTestsInSecureMode ? path.resolve(__dirname, './single/certs/ca/ca.crt') : undefined,
   credentials: {
     username: 'admin',
     password: 'changeit'

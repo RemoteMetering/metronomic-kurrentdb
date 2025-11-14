@@ -1,3 +1,4 @@
+import { runningTestsInSecureMode } from '../_globalHooks.js';
 import { fileURLToPath } from 'node:url';
 import path from 'path';
 
@@ -7,8 +8,8 @@ export default () => ({
   protocol: 'kurrentdb+discover',
   hostname: process.env.ES_HOST || 'localhost',
   port: 22137,
-  useSslConnection: global.runningTestsInSecureMode,
-  tlsCAFile: global.runningTestsInSecureMode ? path.resolve(__dirname, './cluster/certs/ca/ca.crt') : undefined,
+  useSslConnection: runningTestsInSecureMode,
+  tlsCAFile: runningTestsInSecureMode ? path.resolve(__dirname, './cluster/certs/ca/ca.crt') : undefined,
   credentials: {
     username: 'admin',
     password: 'changeit'

@@ -1,7 +1,7 @@
 export default () => ({
-  protocol: global.runningTestsInSecureMode ? 'https' : 'http',
+  protocol: runningTestsInSecureMode ? 'https' : 'http',
   hostname: process.env.ES_HOST || 'localhost',
-  validateServer: !global.runningTestsInSecureMode,
+  validateServer: !runningTestsInSecureMode,
   port: 22117,
   credentials: {
     username: 'admin',

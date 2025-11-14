@@ -6,7 +6,7 @@ services:
     environment:
       PROVISION_DIRECTORIES: "1000:1000:0755:/tmp/certs"
     volumes:
-      - certs:/tmp/certs
+      - ./certs:/tmp/certs
     networks:
       singleclusternetwork:
         ipv4_address: 172.30.239.4
@@ -22,7 +22,7 @@ services:
       && find . -type f -print0 | xargs -0 chmod 666"
     container_name: kurrentdb_test_setup_certs_single
     volumes:
-      - certs:/certs
+      - ./certs:/certs
     depends_on:
       - volumes-provisioner
     networks:
@@ -31,7 +31,7 @@ services:
 
   kurrentdb_test_single:
     image: kurrentplatform/kurrentdb:25.1
-    container_name: kurrentdb_test_single.kurrent
+    container_name: kurrentdb_test_single
     environment:
       - KURRENTDB_MEM_DB=true
       - KURRENTDB_CLUSTER_SIZE=1
@@ -51,7 +51,7 @@ services:
       - "11116:1113"
       - "22117:2113"
     volumes:
-      - certs:/certs
+      - ./certs:/certs
     depends_on:
       - kurrentdb_test_setup_certs_single
     restart: always

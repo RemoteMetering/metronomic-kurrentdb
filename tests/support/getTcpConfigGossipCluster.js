@@ -1,6 +1,8 @@
+import { runningTestsInSecureMode } from '../_globalHooks.js';
+
 export default () => ({
-  useSslConnection: global.runningTestsInSecureMode,
-  validateServer: !global.runningTestsInSecureMode,
+  useSslConnection: runningTestsInSecureMode,
+  validateServer: !runningTestsInSecureMode,
   gossipSeeds: [
     { hostname: process.env.ES_HOST || 'localhost', port: 22137 },
     { hostname: process.env.ES_HOST || 'localhost', port: 22157 },

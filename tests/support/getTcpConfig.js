@@ -1,8 +1,10 @@
+import { runningTestsInSecureMode } from '../_globalHooks.js';
+
 export default () => ({
   hostname: process.env.ES_HOST || 'localhost',
   port: 11116,
-  useSslConnection: global.runningTestsInSecureMode,
-  validateServer: !global.runningTestsInSecureMode,
+  useSslConnection: runningTestsInSecureMode,
+  validateServer: !runningTestsInSecureMode,
   credentials: {
     username: 'admin',
     password: 'changeit'
