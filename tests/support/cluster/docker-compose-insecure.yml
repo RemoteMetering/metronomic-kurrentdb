@@ -1,9 +1,9 @@
 version: "3.5"
 
 services:
-  kurrentdb_test_cluster_node1.kurrentdb: &template
+  kurrentdb_test_cluster_node1: &template
     image: kurrentplatform/kurrentdb:25.1
-    container_name: kurrentdb_test_cluster_node1.kurrentdb
+    container_name: kurrentdb_test_cluster_node1
     env_file:
       - vars.env
     environment:
@@ -15,7 +15,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl --fail --insecure http://kurrentdb_test_cluster_node1.kurrentdb:2113/health/live || exit 1",
+          "curl --fail --insecure http://kurrentdb_test_cluster_node1:2113/health/live || exit 1",
         ]
       interval: 5s
       timeout: 5s
@@ -28,9 +28,9 @@ services:
       clusternetwork:
         ipv4_address: 172.30.240.11
 
-  kurrentdb_test_cluster_node2.kurrentdb:
+  kurrentdb_test_cluster_node2:
     <<: *template
-    container_name: kurrentdb_test_cluster_node2.kurrentdb
+    container_name: kurrentdb_test_cluster_node2
     environment:
       - KURRENTDB_INSECURE=true
       - KURRENTDB_REPLICATION_IP=172.30.240.12
@@ -40,7 +40,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl --fail --insecure http://kurrentdb_test_cluster_node2.kurrentdb:2113/health/live || exit 1",
+          "curl --fail --insecure http://kurrentdb_test_cluster_node2:2113/health/live || exit 1",
         ]
       interval: 5s
       timeout: 5s
@@ -52,9 +52,9 @@ services:
       clusternetwork:
         ipv4_address: 172.30.240.12
 
-  kurrentdb_test_cluster_node3.kurrentdb:
+  kurrentdb_test_cluster_node3:
     <<: *template
-    container_name: kurrentdb_test_cluster_node3.kurrentdb
+    container_name: kurrentdb_test_cluster_node3
     environment:
       - KURRENTDB_INSECURE=true
       - KURRENTDB_REPLICATION_IP=172.30.240.13
@@ -64,7 +64,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl --fail --insecure http://kurrentdb_test_cluster_node3.kurrentdb:2113/health/live || exit 1",
+          "curl --fail --insecure http://kurrentdb_test_cluster_node3:2113/health/live || exit 1",
         ]
       interval: 5s
       timeout: 5s

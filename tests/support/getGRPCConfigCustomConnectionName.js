@@ -1,6 +1,6 @@
-import { runningTestsInSecureMode } from '../_globalHooks.js';
 import { fileURLToPath } from 'node:url';
 import path from 'path';
+import { runningTestsInSecureMode } from '../_globalHooks.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
